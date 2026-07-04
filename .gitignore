@@ -11,6 +11,6 @@ data/*.json
 data/*.xlsx
 
 .vscode/
-.idea/
+.idea/z
 .DS_Store
 *.swp

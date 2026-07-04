@@ -1,3 +1,12 @@
+import pandas as pd
+from dataclasses import dataclass
+
+@dataclass
+class Empresa:
+    nome: str
+    score: float
+
+
 def mostrar_menu():
     print("\n----MENU----")
     print("1. Registrar nova base de dados")
@@ -13,7 +22,8 @@ def menu():
         escolha = mostrar_menu()
 
         if escolha == '1':
-            print("Função Registrar")
+            path = input("Digite o caminho EXATO para o documento: ")
+            carregar_arquivo(path)
         elif escolha == '2':
             print("Função Consulta")
         elif escolha == '3': 
@@ -23,5 +33,11 @@ def menu():
             break
         else:
             print("Opção inválida! Tente novamente")
-
+def carregar_arquivo(path_csv: str):
+    try:
+        df = pd.read_csv(path_csv)
+    except FileNotFoundError:
+        print("Arquivo não existe, verifique o caminho")
+        return []
+    #Nesse momento coletar os dados e organizar utilizando o pandas. OBS.: Não comecei pq to sem os arquivos csv para ver como está organizado
 menu()
