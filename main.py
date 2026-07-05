@@ -1,18 +1,22 @@
 from dataclasses import dataclass
-from hash_table import HashTable, Empresa, Problema
+from hash_table import HashTable, Empresa, Problema, imprimir_ranking
 
 def mostrar_menu():
     print("\n----MENU----")
     print("1. Registrar nova base de dados")
     print("2. Consultar uma empresa/produto")
     print("3. Excluir uma empresa")
-    print("4. Encerrar o programa")
-    opcao = input("Escolha uma opção (1-4): ")
+    print("4. Exibir ranking das 150 piores empresas")
+    print("5. Encerrar o programa")
+    opcao = input("Escolha uma opção (1-5): ")
     return opcao
 
 
 def menu():
     banco_de_dados = None
+
+    ranking = None
+
     while True:
 
         escolha = mostrar_menu()
@@ -31,8 +35,17 @@ def menu():
             if banco_de_dados is None:
                 print("\nErro: Carregue a base de dados primeiro.")
             else:
-                excluir_empresa(banco_de_dados)
+                if excluir_empresa(banco_de_dados): 
+                    ranking = banco_de_dados.ranking()
         elif escolha == '4':
+            if banco_de_dados is None:
+                print("\nErro: Carregue a base de dados primeiro.")
+            else:
+                if ranking is None:
+                    ranking = banco_de_dados.ranking()
+                
+                imprimir_ranking(ranking)
+        elif escolha == '5':
             print("Encerrando o programa")
             break
         else:
