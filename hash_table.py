@@ -1,14 +1,26 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional, List
+
+@dataclass
+class Problema:
+    tipo: str
+    quant: int = 1
 
 @dataclass
 class Empresa:
     nome: str
-    problema: str
     acu_nota: int
     cont_nota: int
     acu_tempo: int
     cont_tempo: int
+    lista_problemas: List[Problema] = field(default_factory=list)
+
+    def registrar_problema(self, tipo_problema: str) -> None:
+        for p in self.lista_problemas:
+            if p.tipo == tipo_problema:
+                p.quant += 1
+                return
+        self.lista_problemas.append(Problema(tipo=tipo_problema))
 
 @dataclass
 class Node:
@@ -30,9 +42,8 @@ class HashTable:
         
          while atual is not None:
             if atual.empresa.nome == nome_empresa:
-                return atual.empresa 
+                return atual.empresa
             atual = atual.next
-            
          return None
     def inserir(self, nova_empresa: Empresa) -> None:
         indice = self.hash_fuction(nova_empresa.nome)
@@ -52,10 +63,34 @@ class HashTable:
                 atual.empresa.acu_tempo += nova_empresa.acu_tempo #Na hora de mostrar, basta printar a divisão do acu/cont
                 atual.empresa.cont_nota += 1
                 atual.empresa.cont_tempo += 1
+                if nova_empresa.lista_problemas:
+                    problema_atual = nova_empresa.lista_problemas[0]
+                    atual.empresa.registrar_problema(problema_atual.tipo)
                 return
 
             if atual.next is None:
                 break
             atual = atual.next
         atual.next = Node(empresa=nova_empresa)
-    
+
+    def excluir(self, nome_empresa: str) -> bool:
+
+        indice = self.hash_function(nome_empresa)
+        atual = self.tabela[indice]
+        anterior: Optional[Node] = None #O ponteiro que vai seguir o atual
+        
+        while atual is not None:
+            if atual.empresa.nome == nome_empresa:
+
+                if anterior is None:
+                    self.tabela[indice] = atual.next
+
+                else:
+                    anterior.next = atual.next
+                
+                return True
+            
+            anterior = atual
+            atual = atual.next
+
+        return False
