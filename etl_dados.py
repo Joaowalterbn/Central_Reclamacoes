@@ -12,7 +12,7 @@ def limpar_base_governo(caminho_entrada, caminho_saida):
 
     # Remove as linhas onde não há nota
     df_limpo = df_limpo[df_limpo["Nota do Consumidor"] != "Não Avaliada"]
-    df_limpo.dropna()
+    df_limpo = df_limpo.dropna()
 
     # Salva um arquivo limpo que o programa principal vai ler
     df_limpo.to_csv(caminho_saida, index=False, sep=";")
