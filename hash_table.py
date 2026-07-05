@@ -42,9 +42,8 @@ class HashTable:
         
          while atual is not None:
             if atual.empresa.nome == nome_empresa:
-                return atual.empresa 
+                return atual.empresa
             atual = atual.next
-            
          return None
     def inserir(self, nova_empresa: Empresa) -> None:
         indice = self.hash_fuction(nova_empresa.nome)
@@ -73,4 +72,25 @@ class HashTable:
                 break
             atual = atual.next
         atual.next = Node(empresa=nova_empresa)
-    
+
+    def excluir(self, nome_empresa: str) -> bool:
+
+        indice = self.hash_function(nome_empresa)
+        atual = self.tabela[indice]
+        anterior: Optional[Node] = None #O ponteiro que vai seguir o atual
+        
+        while atual is not None:
+            if atual.empresa.nome == nome_empresa:
+
+                if anterior is None:
+                    self.tabela[indice] = atual.next
+
+                else:
+                    anterior.next = atual.next
+                
+                return True
+            
+            anterior = atual
+            atual = atual.next
+
+        return False
