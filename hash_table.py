@@ -5,7 +5,10 @@ from typing import Optional, List
 class Empresa:
     nome: str
     problema: str
-    score: int
+    acu_nota: int
+    cont_nota: int
+    acu_tempo: int
+    cont_tempo: int
 
 @dataclass
 class Node:
@@ -43,11 +46,16 @@ class HashTable:
         atual = self.tabela[indice]
 
         while True:
-            if atual.empresa.nome == nova_empresa.nome: #Eliminando caso a empresa já esteja cadastrada. 
+            #Eliminando caso a empresa já esteja cadastrada.
+            if atual.empresa.nome == nova_empresa.nome:  
+                atual.empresa.acu_nota += nova_empresa.acu_nota
+                atual.empresa.acu_tempo += nova_empresa.acu_tempo #Na hora de mostrar, basta printar a divisão do acu/cont
+                atual.empresa.cont_nota += 1
+                atual.empresa.cont_tempo += 1
                 return
-            #OBS.: Temos que ver como fazer para acrescentar a reclamação mesmo que a empresa já esteja lá
 
             if atual.next is None:
                 break
             atual = atual.next
         atual.next = Node(empresa=nova_empresa)
+    
