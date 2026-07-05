@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from hash_table import HashTable, Empresa
+from hash_table import HashTable, Empresa, Problema
 
 def mostrar_menu():
     print("\n----MENU----")
@@ -12,7 +12,9 @@ def mostrar_menu():
 
 
 def menu():
+    banco_de_dados = None
     while True:
+
         escolha = mostrar_menu()
 
         if escolha == '1':
@@ -49,15 +51,15 @@ def carregar_arquivo(path_csv: str):
                 if len(dados) >= 4:
                     try:
                         # Extrai e converte os valores
-                        tempo_resposta = int(dados[0])
+                        tempo_resposta = float(dados[0])
                         nome_empresa = dados[1].strip()
                         problema = dados[2].strip()
-                        nota = int(dados[3])
+                        nota = float(dados[3])
 
-                        # Cria empresa com os valores
+                        # Cria empresa com os valores1
                         nova_empresa = Empresa(
                             nome=nome_empresa,
-                            problema={problema:1},
+                            lista_problemas=[Problema(tipo=problema, quant=1)],
                             acu_nota=nota,
                             cont_nota=1,
                             acu_tempo=tempo_resposta,
@@ -81,7 +83,7 @@ def exibir_consulta(banco_de_dados):
     print("\n--- BUSCA DE EMPRESA ---")
     nome_busca = input("Digite o nome exato da empresa:").strip()
     # Chamada o metodo de busca da tabela hash
-    empresa_encontrada = banco_de_dados.busca()
+    empresa_encontrada = banco_de_dados.busca(nome_busca)
 
     if empresa_encontrada:
         # Calculo das medias
@@ -97,15 +99,15 @@ def exibir_consulta(banco_de_dados):
         print(f"----------------------------------------")
         print(f" PRINCIPAIS PROBLEMAS RELATADOS:")
 
-    problemas_ordenados = sorted(
-        empresa_encontrada.problema.items(),
-        key = lambda item: item[1],
-        reverse=True
-    )
+        problemas_ordenados = sorted(
+            empresa_encontrada.lista_problemas,
+            key = lambda p: p.quant,
+            reverse=True
+        )
 
-    for defeito, quantidade in problemas_ordenados[:5]:
-        print(f" - {defeito}: {quantidade} caso(s)")
-        print(f"========================================\n")
+        for p in problemas_ordenados[:5]:
+            print(f" - {p.tipo}: {p.quant} caso(s)")
+            print(f"========================================\n")
     else:
         print(f"\nNenhum registro encontrado para a empresa '{nome_busca}'.")
 

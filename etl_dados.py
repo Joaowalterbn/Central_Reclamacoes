@@ -1,6 +1,6 @@
 import pandas as pd
-#caminho1 = #Endereço da Base de Dados
-#caminho2 = #Endereço final depois de filtrado
+caminho1 = r"data/base1.csv"
+caminho2 = r"data/baselimpa"
 
 def limpar_base_governo(caminho_entrada, caminho_saida):
     # Le o csv original baixado do governo
@@ -19,4 +19,4 @@ def limpar_base_governo(caminho_entrada, caminho_saida):
     print(f"Base de dados limpa e guardada em: {caminho_saida}")
 
 # Rodar isso daqui uma vez somente
-#limpar_base_governo(caminho1, caminho2)
+limpar_base_governo(caminho1, caminho2)

@@ -28,16 +28,16 @@ class Node:
     next: Optional['Node'] = None
 
 class HashTable:
-    def __init__(self, tamanho: int = 53):
+    def __init__(self, tamanho: int = 1009):
             self.tamanho: int = tamanho
             self.tabela: List[Optional[Node]] = [None] * self.tamanho
-    def hash_fuction(self, nome_empresa: str) -> int:
+    def hash_function(self, nome_empresa: str) -> int:
         hash_value = 5381
         for char in nome_empresa:
             hash_value = ((hash_value << 5) + hash_value) + ord(char)
         return hash_value % self.tamanho
     def busca(self, nome_empresa: str) -> Optional[Empresa]:
-         indice = self.hash_fuction(nome_empresa)
+         indice = self.hash_function(nome_empresa)
          atual = self.tabela[indice]
         
          while atual is not None:
@@ -46,7 +46,7 @@ class HashTable:
             atual = atual.next
          return None
     def inserir(self, nova_empresa: Empresa) -> None:
-        indice = self.hash_fuction(nova_empresa.nome)
+        indice = self.hash_function(nova_empresa.nome)
         
         #Caso base: Se a célula ta vazia
         if self.tabela[indice] is None:
