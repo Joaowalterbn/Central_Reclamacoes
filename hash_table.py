@@ -1,14 +1,26 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional, List
+
+@dataclass
+class Problema:
+    tipo: str
+    quant: int = 1
 
 @dataclass
 class Empresa:
     nome: str
-    problema: str
     acu_nota: int
     cont_nota: int
     acu_tempo: int
     cont_tempo: int
+    lista_problemas: List[Problema] = field(default_factory=list)
+
+    def registrar_problema(self, tipo_problema: str) -> None:
+        for p in self.lista_problemas:
+            if p.tipo == tipo_problema:
+                p.quant += 1
+                return
+        self.lista_problemas.append(Problema(tipo=tipo_problema))
 
 @dataclass
 class Node:
@@ -52,6 +64,9 @@ class HashTable:
                 atual.empresa.acu_tempo += nova_empresa.acu_tempo #Na hora de mostrar, basta printar a divisão do acu/cont
                 atual.empresa.cont_nota += 1
                 atual.empresa.cont_tempo += 1
+                if nova_empresa.lista_problemas:
+                    problema_atual = nova_empresa.lista_problemas[0]
+                    atual.empresa.registrar_problema(problema_atual.tipo)
                 return
 
             if atual.next is None:
